@@ -1,4 +1,4 @@
-const getStoredBook = () => {
+export const getStoredBook = () => {
   const storedBookStr = localStorage.getItem("readList");
   return storedBookStr ? JSON.parse(storedBookStr) : [];
 };
