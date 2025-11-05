@@ -21,7 +21,7 @@ const Books = ({ data }) => {
       {/* <Suspense fallback={<span>Loading...</span>}>
             <Book bookPromise={bookPromise}></Book>
       </Suspense> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 lg:mb-12">
         {data.map((bookItem) => (
           <Book key={bookItem.bookId} bookItem={bookItem}></Book>
         ))}

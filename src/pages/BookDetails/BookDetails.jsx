@@ -1,12 +1,12 @@
 import React from "react";
 import { useLoaderData, useParams } from "react-router";
+import { addToStoredDB } from "../../Utility/addToDB";
 
 const BookDetails = () => {
   const { id } = useParams();
   const bookId = parseInt(id);
   const data = useLoaderData();
-  console.log(id);
-  console.log(data);
+
   const singleBook = data.find((book) => book.bookId === bookId);
   const {
     image,
@@ -20,6 +20,10 @@ const BookDetails = () => {
     yearOfPublishing,
     rating,
   } = singleBook;
+
+  const handleMarkToRead = (id) => {
+    addToStoredDB(id);
+  };
 
   return (
     <div>
@@ -82,7 +86,10 @@ const BookDetails = () => {
           </div>
 
           <div className="card-actions flex items-center gap-4">
-            <button className="btn px-7 py-5 bg-white border-2 border-[#1313134D] rounded-lg text-[#131313] font-semibold text-lg hover:bg-gray-50 transition-colors">
+            <button
+              onClick={() => handleMarkToRead(id)}
+              className="btn px-7 py-5 bg-white border-2 border-[#1313134D] rounded-lg text-[#131313] font-semibold text-lg hover:bg-gray-50 transition-colors"
+            >
               Read
             </button>
             <button className="btn px-7 py-5 bg-[#50B1C9] border-none rounded-lg text-white font-semibold text-lg hover:bg-[#3d9ab0] transition-colors">
