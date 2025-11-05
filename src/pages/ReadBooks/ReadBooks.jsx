@@ -1,9 +1,11 @@
 import { MapPin, StickyNote, Users } from "lucide-react";
 import React from "react";
+import { Link } from "react-router";
 
 const ReadBooks = ({ book }) => {
   const {
-    image,
+      image,
+      bookId,
     bookName,
     author,
     tags,
@@ -68,9 +70,12 @@ const ReadBooks = ({ book }) => {
             <span className=" bg-[#ffac3326] text-[#ffac33] py-3 px-5 rounded-4xl leading-5">
               Rating: {rating}
             </span>
-            <button className="btn bg-[#23be0a] text-white text-xl font-medium py-3 px-5 rounded-4xl leading-5">
+            <Link
+              to={`/bookDetails/${bookId}`}
+              className="btn bg-[#23be0a] text-white text-xl font-medium py-3 px-5 rounded-4xl leading-5"
+            >
               View Details
-            </button>
+            </Link>
           </div>
         </div>
       </div>
