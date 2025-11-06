@@ -1,6 +1,7 @@
 import React from "react";
 import { useLoaderData, useParams } from "react-router";
 import { addToStoredDB, addToWishList } from "../../Utility/addToDB";
+import Swal from "sweetalert2";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -22,11 +23,46 @@ const BookDetails = () => {
   } = singleBook;
 
   const handleMarkToRead = (id) => {
-    addToStoredDB(id);
+    const result = addToStoredDB(id);
+    if (result.success) {
+      Swal.fire({
+        title: "Success!",
+        text: result.message,
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#23BE0A",
+      });
+    } else {
+      Swal.fire({
+        title: "Already Added!",
+        text: result.message,
+        icon: "info",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#23BE0A",
+      });
+    }
   };
 
   const handleAddToWishList = (id) => {
-    addToWishList(id);
+    const result = addToWishList(id);
+
+    if (result.success) {
+      Swal.fire({
+        title: "Success!",
+        text: result.message,
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#50B1C9",
+      });
+    } else {
+      Swal.fire({
+        title: "Cannot Add!",
+        text: result.message,
+        icon: "warning",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#50B1C9",
+      });
+    }
   };
 
   return (

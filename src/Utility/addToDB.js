@@ -24,8 +24,10 @@ export const addToStoredDB = (id) => {
   const storedBookData = getStoredBook();
 
   if (storedBookData.includes(id)) {
-    alert(`This Book is already added!`);
-    return;
+    return {
+      success: false,
+      message: "This book is already is your Read List!",
+    };
   }
 
   // Remove from wishlist if it's there
@@ -38,7 +40,7 @@ export const addToStoredDB = (id) => {
   storedBookData.push(id);
   const readListData = JSON.stringify(storedBookData);
   localStorage.setItem("readList", readListData);
-  alert(`Book added to Read List!`);
+  return { success: true, message: "Book added to Read List!" };
 };
 
 // Add to Wishlist
@@ -47,17 +49,21 @@ export const addToWishList = (id) => {
   const readListData = getStoredBook();
 
   if (readListData.includes(id)) {
-    alert("This book is already in your Read List!");
-    return;
+    return {
+      success: false,
+      message: "This book is already in your Read List!",
+    };
   }
 
   if (storedWishListData.includes(id)) {
-    alert("This book is already in your WishList");
-    return;
+    return {
+      success: false,
+      message: "This book is already in your Wishlist!",
+    };
   }
 
   storedWishListData.push(id);
   const wishListData = JSON.stringify(storedWishListData);
   localStorage.setItem("wishList", wishListData);
-  alert("Book added to WishList!");
+  return { success: true, message: "Book added to Wishlist!" };
 };
