@@ -6,19 +6,23 @@ import Home from "../pages/Home";
 import About from "../pages/About/About";
 import BookDetails from "../pages/BookDetails/BookDetails";
 import ReadList from "../pages/ReadList/ReadList";
+import Loading from "../components/Loading/Loading";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    hydrateFallbackElement: <span>Loading...</span>,
     element: <Root></Root>,
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
-        loader: () => fetch("/booksData.json"),
+        loader: async () => {
+          const response = await fetch("/booksData.json");
+          return response.json();
+        },
         path: "/",
         Component: Home,
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "/about",
@@ -26,18 +30,30 @@ export const router = createBrowserRouter([
       },
       {
         path: "/bookDetails/:id",
-        loader: () => fetch("/booksData.json"),
+        loader: async () => {
+          const response = await fetch("/booksData.json");
+          return response.json();
+        },
         Component: BookDetails,
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "/readList",
-        loader: () => fetch("/booksData.json"),
+        loader: async () => {
+          const response = await fetch("/booksData.json");
+          return response.json();
+        },
         Component: ReadList,
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "/wishList",
-        loader: () => fetch("/booksData.json"),
+        loader: async () => {
+          const response = await fetch("/booksData.json");
+          return response.json();
+        },
         Component: ReadList,
+        hydrateFallbackElement: <Loading />,
       },
     ],
   },
