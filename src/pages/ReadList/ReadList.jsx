@@ -1,53 +1,92 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useLocation } from "react-router";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { getStoredBook } from "../../Utility/addToDB";
+import { getStoredBook, getStoredWishList } from "../../Utility/addToDB";
 import ReadBooks from "../ReadBooks/ReadBooks";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import WishListBooks from "../WishListBooks/WishListBooks";
 
 const ReadList = () => {
   const [readList, setReadList] = useState([]);
+  const [wishList, setWishList] = useState([]);
   const [sort, setSort] = useState("");
+  const [tabIndex, setTabIndex] = useState(0);
   const data = useLoaderData();
+  const location = useLocation();
+
+  // Set default tab based on route
+  useEffect(() => {
+    if (location.pathname === "/wishList") {
+      setTabIndex(1);
+    } else {
+      setTabIndex(0);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
+    // Load Read List
     const storedBookData = getStoredBook();
     const storedBookId = storedBookData.map((id) => parseInt(id));
     const myReadList = data.filter((book) =>
       storedBookId.includes(book.bookId)
     );
     setReadList(myReadList);
+
+    // Load Wishlist
+    const storedWishListData = getStoredWishList();
+    const storedWishListId = storedWishListData.map((id) => parseInt(id));
+    const myWishlist = data.filter((book) =>
+      storedWishListId.includes(book.bookId)
+    );
+    setWishList(myWishlist);
   }, [data]);
 
   const handleSort = (sortType) => {
     setSort(sortType);
 
-    let sortedList = [...readList];
+    let sortedReadList = [...readList];
+    let sortedWishList = [...wishList];
 
     if (sortType === "Pages") {
-      sortedList.sort((a, b) => b.totalPages - a.totalPages);
+      sortedReadList.sort((a, b) => b.totalPages - a.totalPages);
+      sortedWishList.sort((a, b) => b.totalPages - a.totalPages);
     } else if (sortType === "Ratings") {
-      sortedList.sort((a, b) => b.rating - a.rating);
+      sortedReadList.sort((a, b) => b.rating - a.rating);
+      sortedWishList.sort((a, b) => b.rating - a.rating);
     } else if (sortType === "Book Name") {
-      sortedList.sort((a, b) => a.bookName.localeCompare(b.bookName));
+      sortedReadList.sort((a, b) => a.bookName.localeCompare(b.bookName));
+      sortedWishList.sort((a, b) => a.bookName.localeCompare(b.bookName));
     } else if (sortType === "Category") {
-      sortedList.sort((a, b) => a.category.localeCompare(b.category));
+      sortedReadList.sort((a, b) => a.category.localeCompare(b.category));
+      sortedWishList.sort((a, b) => a.category.localeCompare(b.category));
     } else if (sortType === "Year of Publishing") {
-      sortedList.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
+      sortedReadList.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
+      sortedWishList.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
     }
 
-    setReadList(sortedList);
+    setReadList(sortedReadList);
+    setWishList(sortedWishList);
   };
 
   const handleReset = () => {
     setSort("");
+
+    // Reset Read List
     const storedBookData = getStoredBook();
     const storedBookId = storedBookData.map((id) => parseInt(id));
     const myReadList = data.filter((book) =>
       storedBookId.includes(book.bookId)
     );
     setReadList(myReadList);
+
+    // Reset Wishlist
+    const storedWishListData = getStoredWishList();
+    const storedWishListId = storedWishListData.map((id) => parseInt(id));
+    const myWishlist = data.filter((book) =>
+      storedWishListId.includes(book.bookId)
+    );
+    setWishList(myWishlist);
   };
 
   return (
@@ -63,10 +102,10 @@ const ReadList = () => {
             role="button"
             className="btn m-1 text-white py-3.5 px-5 rounded-lg bg-[#23be0a] "
           >
-            Sort By {sort ? sort : ""} <ChevronDown />
+            {sort ? `Sort By ${sort}` : "Sort By "} <ChevronDown />
           </div>
           <ul
-            tabIndex="-1"
+            tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
           >
             <li>
@@ -93,60 +132,39 @@ const ReadList = () => {
         </div>
       </div>
 
-      <Tabs>
-        <TabList aria-activedescendant="#131313">
+      <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+        <TabList>
           <Tab>Read Books</Tab>
           <Tab>Wishlist Books</Tab>
         </TabList>
 
         <TabPanel>
-          <div>
-            {readList.map((book) => (
-              <ReadBooks key={book.bookId} book={book}></ReadBooks>
-            ))}
+          <div className="my-8">
+            {readList.length > 0 ? (
+              readList.map((book) => (
+                <ReadBooks key={book.bookId} book={book}></ReadBooks>
+              ))
+            ) : (
+              <p className="text-center text-gray-600">
+                No books in your read list yet!
+              </p>
+            )}
           </div>
         </TabPanel>
         <TabPanel>
-          <h2>Any content 2</h2>
+          <div className="my-8">
+            {wishList.length > 0 ? (
+              wishList.map((book) => (
+                <WishListBooks key={book.bookId} book={book} />
+              ))
+            ) : (
+              <p className="text-center text-gray-500">
+                No books in your wishlist yet!
+              </p>
+            )}
+          </div>
         </TabPanel>
       </Tabs>
-
-      <div className="flex justify-center items-center mt-4 lg:mt-8 mb-7 lg:mb-14">
-        <div className="dropdown dropdown-top dropdown-center">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1 text-white py-3.5 px-5 rounded-lg bg-[#23be0a] "
-          >
-            Sort By {sort ? sort : ""} <ChevronUp />
-          </div>
-          <ul
-            tabIndex="-1"
-            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-          >
-            <li>
-              <a onClick={handleReset}>All Books</a>
-            </li>
-            <li>
-              <a onClick={() => handleSort("Pages")}>Pages</a>
-            </li>
-            <li>
-              <a onClick={() => handleSort("Book Name")}>Book Name</a>
-            </li>
-            <li>
-              <a onClick={() => handleSort("Ratings")}>Ratings</a>
-            </li>
-            <li>
-              <a onClick={() => handleSort("Category")}>Category</a>
-            </li>
-            <li>
-              <a onClick={() => handleSort("Year of Publishing")}>
-                Year of Publishing
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
     </div>
   );
 };

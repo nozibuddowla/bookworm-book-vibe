@@ -1,6 +1,6 @@
 import React from "react";
 import { useLoaderData, useParams } from "react-router";
-import { addToStoredDB } from "../../Utility/addToDB";
+import { addToStoredDB, addToWishList } from "../../Utility/addToDB";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -23,6 +23,10 @@ const BookDetails = () => {
 
   const handleMarkToRead = (id) => {
     addToStoredDB(id);
+  };
+
+  const handleAddToWishList = (id) => {
+    addToWishList(id);
   };
 
   return (
@@ -87,12 +91,15 @@ const BookDetails = () => {
 
           <div className="card-actions flex items-center gap-4">
             <button
-              onClick={() => handleMarkToRead(id)}
+              onClick={() => handleMarkToRead(bookId)}
               className="btn px-7 py-5 bg-white border-2 border-[#1313134D] rounded-lg text-[#131313] font-semibold text-lg hover:bg-gray-50 transition-colors"
             >
               Read
             </button>
-            <button className="btn px-7 py-5 bg-[#50B1C9] border-none rounded-lg text-white font-semibold text-lg hover:bg-[#3d9ab0] transition-colors">
+            <button
+              onClick={() => handleAddToWishList(bookId)}
+              className="btn px-7 py-5 bg-[#50B1C9] border-none rounded-lg text-white font-semibold text-lg hover:bg-[#3d9ab0] transition-colors"
+            >
               Wishlist
             </button>
           </div>

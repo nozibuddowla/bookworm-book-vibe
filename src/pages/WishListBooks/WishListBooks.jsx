@@ -2,7 +2,7 @@ import { MapPin, StickyNote, Users } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
 
-const ReadBooks = ({ book }) => {
+const WishListBooks = ({ book }) => {
   const {
     image,
     bookId,
@@ -17,7 +17,7 @@ const ReadBooks = ({ book }) => {
   } = book;
   return (
     <div>
-      <div className="card grid grid-cols-1 md:grid-cols-12 gap-6 my-8 bg-white shadow-sm p-6">
+      <div className="card grid grid-cols-1 md:grid-cols-12 gap-6 my-8 bg-[#50B1C9] shadow-sm p-6">
         <figure className="md:col-span-3 bg-[#f3f3f3] rounded-2xl py-7 flex justify-center items-center">
           <img
             src={image}
@@ -37,7 +37,7 @@ const ReadBooks = ({ book }) => {
                 {tags.map((tag, index) => (
                   <div
                     key={index}
-                    className="badge bg-[#23be0a0d] text-[#23be0a] rounded-4xl font-medium py-2 px-4 "
+                    className="bg-[#23be0a] text-[#131313] rounded-4xl font-medium py-2 px-4 "
                   >
                     {tag}
                   </div>
@@ -64,15 +64,15 @@ const ReadBooks = ({ book }) => {
             </div>
           </div>
           <div className="card-actions items-center ">
-            <span className=" bg-[#328eff26] text-[#328eff] py-3 px-5 rounded-4xl leading-5">
+            <span className=" bg-[#328eff] text-[#131313] py-3 px-5 rounded-4xl leading-5">
               Category: {category}
             </span>
-            <span className=" bg-[#ffac3326] text-[#ffac33] py-3 px-5 rounded-4xl leading-5">
+            <span className=" bg-[#ffac33] text-[#131313] py-3 px-5 rounded-4xl leading-5">
               Rating: {rating}
             </span>
             <Link
               to={`/bookDetails/${bookId}`}
-              className="btn bg-[#23be0a] text-white text-xl font-medium py-3 px-5 rounded-4xl leading-5"
+              className="btn bg-[#23be0a] text-white border-none text-xl font-medium py-3 px-5 rounded-4xl leading-5"
             >
               View Details
             </Link>
@@ -83,4 +83,4 @@ const ReadBooks = ({ book }) => {
   );
 };
 
-export default ReadBooks;
+export default WishListBooks;
